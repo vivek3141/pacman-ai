@@ -1,5 +1,5 @@
 import gym
-from q_learning import QLearningAgent
+from q_learning_agent import QLearningAgent
 
 env = gym.make("Taxi-v2")
 
