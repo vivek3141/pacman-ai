@@ -8,7 +8,7 @@ class QLearningAgent:
         self.q = np.zeros([env.observation_space.n, env.action_space.n])
         self.env = env
 
-    def train(self, num_episodes, learning_rate, gamma, to_print=True, interval=50, to_render=True):
+    def train(self, num_episodes=2000, learning_rate=0.618, gamma=1, to_print=True, interval=50, to_render=True):
         if to_print:
             print("Training...\n")
 
