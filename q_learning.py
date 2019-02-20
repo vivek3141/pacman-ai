@@ -33,7 +33,7 @@ class QLearningAgent:
                     self.env.render()
 
             if i % interval == 0 and to_print:
-                print(f"Episode: {i}, Reward{total_reward}")
+                print(f"Episode: {i+1}, Reward{total_reward}")
 
     def test(self, num_episodes=5, to_print=True, to_render=True):
         if to_print:
@@ -45,11 +45,11 @@ class QLearningAgent:
             state = self.env.reset()
 
             while not done:
-                state, reward, done, info = self.env.step(self.q[np.argmax(state)])
+                state, reward, done, info = self.env.step(np.argmax(self.q[state]))
                 total_reward += reward
 
                 if to_render:
                     self.env.render()
 
             if to_print:
-                print(f"Episode {i}, Reward {total_reward}")
+                print(f"Episode {i+1}, Reward {total_reward}")
