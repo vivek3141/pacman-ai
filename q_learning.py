@@ -35,7 +35,7 @@ class QLearningAgent:
             if i % interval == 0 and to_print:
                 print(f"Episode: {i}, Reward{total_reward}")
 
-    def test(self, num_episodes, to_print=True, to_render=True):
+    def test(self, num_episodes=5, to_print=True, to_render=True):
         if to_print:
             print("Testing...\n")
 
