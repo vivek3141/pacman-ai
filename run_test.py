@@ -6,7 +6,6 @@ import time
 env = gym.make('BerkeleyPacman-v0')
 env.seed(1)
 
-
 done = False
 
 while True:
@@ -17,4 +16,3 @@ while True:
         i += 1
         s_, r, done, info = env.step(env.action_space.sample())
         env.render()
-        

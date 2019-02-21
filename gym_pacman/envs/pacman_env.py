@@ -5,12 +5,11 @@ import numpy as np
 
 from .graphicsDisplay import PacmanGraphics, DEFAULT_GRID_SIZE
 
-from .game import Actions
+from .game import Actions, Agent
 from .pacman import ClassicGameRules
 from .layout import getLayout, getRandomLayout
 
-from .ghostAgents import DirectionalGhost
-from .pacmanAgents import OpenAIAgent
+from .agents import DirectionalGhost
 
 from gym.utils import seeding
 
@@ -112,7 +111,7 @@ class PacmanEnv(gym.Env):
         self.ghosts = [DirectionalGhost(i + 1, prob_attack=0.2, prob_scaredFlee=0.2) for i in range(MAX_GHOSTS)]
 
         # this agent is just a placeholder for graphics to work
-        self.pacman = OpenAIAgent()
+        self.pacman = Agent()
 
         self.rules = ClassicGameRules(300)
         self.rules.quiet = False

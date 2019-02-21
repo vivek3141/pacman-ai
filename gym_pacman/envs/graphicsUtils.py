@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -24,45 +24,46 @@ from time import sleep
 
 from PIL import Image, ImageDraw
 
-d_o_e = None # set this in begin graphics
+d_o_e = None  # set this in begin graphics
 d_w = Tkinter._tkinter.DONT_WAIT
 
+
 def formatColor(r, g, b):
-        return '#%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
+    return '#%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
+
 
 def colorToVector(color):
-        return map(lambda x: int(x, 16) / 256.0, [color[1:3], color[3:5], color[5:7]])
+    return map(lambda x: int(x, 16) / 256.0, [color[1:3], color[3:5], color[5:7]])
+
 
 ghost_shape = [
-        (0, - 0.5),
-        (0.25, - 0.75),
-        (0.5, - 0.5),
-        (0.75, - 0.75),
-        (0.75, 0.5),
-        (0.5, 0.75),
-        (- 0.5, 0.75),
-        (- 0.75, 0.5),
-        (- 0.75, - 0.75),
-        (- 0.5, - 0.5),
-        (- 0.25, - 0.75)
-    ]
+    (0, - 0.5),
+    (0.25, - 0.75),
+    (0.5, - 0.5),
+    (0.75, - 0.75),
+    (0.75, 0.5),
+    (0.5, 0.75),
+    (- 0.5, 0.75),
+    (- 0.75, 0.5),
+    (- 0.75, - 0.75),
+    (- 0.5, - 0.5),
+    (- 0.25, - 0.75)
+]
 
 
 class GraphicsUtils:
     def __init__(self):
         self._Windows = sys.platform == 'win32'  # True if on Win95/98/NT
 
-        self._root_window = None      # The root window for graphics output
-        self._canvas = None      # The canvas which holds graphics
-        self._canvas_xs = None      # Size of canvas object
+        self._root_window = None  # The root window for graphics output
+        self._canvas = None  # The canvas which holds graphics
+        self._canvas_xs = None  # Size of canvas object
         self._canvas_ys = None
-        self._canvas_x = None      # Current position on canvas
+        self._canvas_x = None  # Current position on canvas
         self._canvas_y = None
-        self._canvas_col = None      # Current colour (set to black below)
+        self._canvas_col = None  # Current colour (set to black below)
         self._canvas_tsize = 12
         self._canvas_tserifs = 0
-
-    
 
     def sleep(self, secs):
         if self._root_window == None:
@@ -77,7 +78,6 @@ class GraphicsUtils:
         if self._root_window is not None:
             # Lose the window.
             self._root_window.destroy()
-        
 
         # Save the canvas size parameters
         self._canvas_xs, self._canvas_ys = width - 1, height - 1
@@ -95,28 +95,27 @@ class GraphicsUtils:
         # Create the canvas object
         try:
             self._canvas = Tkinter.Canvas(self._root_window,
-                width=width,
-                height=height,
-                bd=0.0,
-                bg='#000000',
-                highlightbackground='#000000',
-                highlightcolor='#000000',
-                highlightthickness=0)
+                                          width=width,
+                                          height=height,
+                                          bd=0.0,
+                                          bg='#000000',
+                                          highlightbackground='#000000',
+                                          highlightcolor='#000000',
+                                          highlightthickness=0)
             self._canvas.pack(fill=Tkinter.BOTH, expand=1)
             self.draw_background()
             self._canvas.update()
         except:
             self._root_window = None
             raise
-        
+
         if self._Windows:
             self._canvas_tfonts = ['times new roman', 'lucida console']
         else:
             self._canvas_tfonts = ['times', 'lucidasans-24']
 
-
     def draw_background(self):
-        corners = [(0,0), (0, self._canvas_ys), (self._canvas_xs, self._canvas_ys), (self._canvas_xs, 0)]
+        corners = [(0, 0), (0, self._canvas_ys), (self._canvas_xs, self._canvas_ys), (self._canvas_xs, 0)]
         self.polygon(corners, self._bg_color, fillColor=self._bg_color, filled=True, smoothed=False)
 
     def _destroy_window(self, event=None):
@@ -152,7 +151,7 @@ class GraphicsUtils:
         if filled == 0: fillColor = ""
         poly = self._canvas.create_polygon(c, outline=outlineColor, fill=fillColor, smooth=smoothed, width=width)
         if behind > 0:
-            self._canvas.tag_lower(poly, behind) # Higher should be more visible
+            self._canvas.tag_lower(poly, behind)  # Higher should be more visible
         return poly
 
     def square(self, pos, r, color, filled=1, behind=0):
@@ -171,23 +170,22 @@ class GraphicsUtils:
         while e[0] > e[1]: e[1] = e[1] + 360
 
         return self._canvas.create_arc(x0, y0, x1, y1, outline=outlineColor, fill=fillColor,
-                                extent=e[1] - e[0], start=e[0], style=style, width=width)
-        
+                                       extent=e[1] - e[0], start=e[0], style=style, width=width)
+
     def image(self, filename="/tmp/pacman-frame"):
         ps = self._canvas.postscript(colormode='color')
         im = Image.open(io.BytesIO(ps.encode('utf-8')))
         w, h = im.size
-        im = im.crop((1,1,w-1,h-1))
+        im = im.crop((1, 1, w - 1, h - 1))
         return im
-
 
     def refresh(self):
         self._canvas.update_idletasks()
 
     def moveCircle(self, id, pos, r, endpoints=None):
         x, y = pos
-    #    x0, x1 = x - r, x + r + 1
-    #    y0, y1 = y - r, y + r + 1
+        #    x0, x1 = x - r, x + r + 1
+        #    y0, y1 = y - r, y + r + 1
         x0, x1 = x - r - 1, x + r
         y0, y1 = y - r - 1, y + r
         if endpoints == None:
@@ -232,13 +230,15 @@ class GraphicsUtils:
 
     def move_to(self, object, x, y=None):
         if y is None:
-            try: x, y = x
-            except: raise  'incomprehensible coordinates'
+            try:
+                x, y = x
+            except:
+                raise 'incomprehensible coordinates'
 
         horiz = True
         newCoords = []
-        current_x, current_y = self._canvas.coords(object)[0:2] # first point
-        for coord in  self._canvas.coords(object):
+        current_x, current_y = self._canvas.coords(object)[0:2]  # first point
+        for coord in self._canvas.coords(object):
             if horiz:
                 inc = x - current_x
             else:
@@ -252,12 +252,14 @@ class GraphicsUtils:
 
     def move_by(self, object, x, y=None, lift=False):
         if y is None:
-            try: x, y = x
-            except: raise Exception('incomprehensible coordinates')
+            try:
+                x, y = x
+            except:
+                raise Exception('incomprehensible coordinates')
 
         horiz = True
         newCoords = []
-        for coord in  self._canvas.coords(object):
+        for coord in self._canvas.coords(object):
             if horiz:
                 inc = x
             else:
@@ -274,8 +276,6 @@ class GraphicsUtils:
         "Writes the current canvas to a postscript file."
         psfile = file(filename, 'w')
         psfile.write(self._canvas.postscript(pageanchor='sw',
-                        y='0.c',
-                        x='0.c'))
+                                             y='0.c',
+                                             x='0.c'))
         psfile.close()
-
-    
