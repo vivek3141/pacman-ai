@@ -81,6 +81,7 @@ class Train:
         p.add_reporter(neat.StdOutReporter(True))
         stats = neat.StatisticsReporter()
         p.add_reporter(stats)
+        p.add_reporter(neat.Checkpointer(5))
 
         winner = p.run(self._eval_genomes, generations)
 
