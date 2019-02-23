@@ -5,90 +5,47 @@ import pickle
 import multiprocessing as mp
 import visualize
 
-gym.logger.set_level(40) # Disable gym warnings
-os.chdir("./checkpoints") # To store the checkpoints in this folder
+gym.logger.set_level(40)  # Disable gym warnings
+os.chdir("./checkpoints")  # To store the checkpoints in this folder
 
 # Learning Parameters
-NUM_GENERATIONS=1000
-PARALLEL = 2 # Number of environments to run at once
-ENV = "MsPacman-ram-v0"
+NUM_GENERATIONS = 1000
+PARALLEL = 2  # Number of environments to run at once
+ENV = "MsPacman-ram-v0"  # RAM means number of inputs 128
+
 
 class Train:
-    def __init__(self, generations, parallel=2, level="1-1"):
+    def __init__(self, generations, parallel=2):
         self.generations = generations
-        self.lock = mp.Lock()
         self.par = parallel
-        self.level = level
 
-    def _get_actions(self, a):
-        return self.actions[a.index(max(a))]
+    @staticmethod
+    def _fitness_func(genome, config):
+        env = gym.make(ENV)
 
-    def _fitness_func_no_parallel(self, genomes, config):
-        env = gym.make('ppaquette/SuperMarioBros-'+self.level+'-Tiles-v0')
-        idx, genomes = zip(*genomes)
-        for genome in genomes:
-            try:
-                state = env.reset()
-                net = neat.nn.FeedForwardNetwork.create(genome, config)
-                done = False
-                i = 0
-                old = 40
-                while not done:
-                    state = state.flatten()
-                    output = net.activate(state)
-                    output = self._get_actions(output)
-                    s, reward, done, info = env.step(output)
-                    state = s
-                    i += 1
-                    if i % 50 == 0:
-                        if old == info['distance']:
-                            break
-                        else:
-                            old = info['distance']
-
-                # [print(str(i) + " : " + str(info[i]), end=" ") for i in info.keys()]
-                # print("\n******************************")
-
-                fitness = -1 if info['distance'] <= 40 else info['distance']
-                genome.fitness = fitness
-                env.close()
-            except KeyboardInterrupt:
-                env.close()
-                exit()
-
-    def _fitness_func(self, genome, config, o):
-        env = gym.make('ppaquette/SuperMarioBros-1-1-Tiles-v0')
-        # env.configure(lock=self.lock)
         try:
             state = env.reset()
             net = neat.nn.FeedForwardNetwork.create(genome, config)
             done = False
-            i = 0
-            old = 40
+            total_reward = 0
+
             while not done:
                 state = state.flatten()
                 output = net.activate(state)
-                output = self._get_actions(output)
-                s, reward, done, info = env.step(output)
-                state = s
-                i += 1
-                if i % 50 == 0:
-                    if old == info['distance']:
-                        break
-                    else:
-                        old = info['distance']
+                action = output.index(max(output))
+                observation, reward, done, info = env.step(action)
+                state = observation
+                total_reward += reward
 
-            # [print(str(i) + " : " + str(info[i]), end=" ") for i in info.keys()]
-            # print("\n******************************")
+            fitness = total_reward
+            genome.fitness = fitness
 
-            fitness = -1 if info['distance'] <= 40 else info['distance']
-            if fitness >= 3252:
-                pickle.dump(genome, open("finisher.pkl", "wb"))
-                env.close()
-                print("Done")
-                exit()
-            o.put(fitness)
+            if fitness >= 500:
+                pickle.dump(genome, open("finisher.pkl", "wb"))  # Save a good model just in case of a crash
+
             env.close()
+
+        # To easily stop the training
         except KeyboardInterrupt:
             env.close()
             exit()
@@ -97,33 +54,25 @@ class Train:
         idx, genomes = zip(*genomes)
 
         for i in range(0, len(genomes), self.par):
-            output = mp.Queue()
+            processes = [mp.Process(target=self._fitness_func, args=(genome, config)) for genome in
+                         genomes[i:i + self.par]]  # Define all the processes
 
-            processes = [mp.Process(target=self._fitness_func, args=(genome, config, output)) for genome in
-                         genomes[i:i + self.par]]
-
+            # Run the processes
             [p.start() for p in processes]
             [p.join() for p in processes]
 
-            results = [output.get() for p in processes]
-
-            for n, r in enumerate(results):
-                genomes[i + n].fitness = r
-
-    def _run(self, config_file, n):
+    def _run(self, config_file, generations):
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                              neat.DefaultSpeciesSet, neat.DefaultStagnation,
                              config_file)
         p = neat.Population(config)
         p.add_reporter(neat.StdOutReporter(True))
-        p.add_reporter(neat.Checkpointer(5))
         stats = neat.StatisticsReporter()
         p.add_reporter(stats)
-        print("loaded checkpoint...")
-        winner = p.run(self._eval_genomes, n)
-        win = p.best_genome
+
+        winner = p.run(self._eval_genomes, generations)
+
         pickle.dump(winner, open('winner.pkl', 'wb'))
-        pickle.dump(win, open('real_winner.pkl', 'wb'))
 
         visualize.draw_net(config, winner, True)
         visualize.plot_stats(stats, ylog=False, view=True)
@@ -136,5 +85,5 @@ class Train:
 
 
 if __name__ == "__main__":
-    t = Train(1000)
+    t = Train(NUM_GENERATIONS)
     t.main()
