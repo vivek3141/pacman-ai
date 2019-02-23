@@ -12,7 +12,7 @@ os.chdir("./checkpoints")  # To store the checkpoints in this folder
 NUM_GENERATIONS = 1000
 PARALLEL = 2  # Number of environments to run at once
 ENV = "MsPacman-ram-v0"  # RAM means number of inputs 128
-CONFIG_FILE = "config"
+CONFIG_FILE = "../config"
 
 
 class Train:
@@ -77,7 +77,8 @@ class Train:
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                              neat.DefaultSpeciesSet, neat.DefaultStagnation,
                              config_file)
-        p = neat.Population(config)
+        # p = neat.Population(config)
+        p = neat.Checkpointer.restore_checkpoint("neat-checkpoint-408")
 
         p.add_reporter(neat.StdOutReporter(True))
         stats = neat.StatisticsReporter()
