@@ -30,12 +30,15 @@ class Train:
             total_reward = 0
 
             while not done:
+                # Pass input through neural network
                 state = state.flatten()
                 output = net.activate(state)
                 action = output.index(max(output))
+
                 observation, reward, done, info = env.step(action)
                 state = observation
                 total_reward += reward
+                # env.render()  # Uncomment this if you want the game to show when training
 
             fitness = total_reward
             genome.fitness = fitness
