@@ -6,6 +6,7 @@ import multiprocessing as mp
 import visualize
 
 gym.logger.set_level(40)
+os.chdir("./checkpoints")
 
 
 class Train:
@@ -24,7 +25,6 @@ class Train:
 
     def _fitness_func_no_parallel(self, genomes, config):
         env = gym.make('ppaquette/SuperMarioBros-'+self.level+'-Tiles-v0')
-        env.action_space
         idx, genomes = zip(*genomes)
         for genome in genomes:
             try:
@@ -137,4 +137,4 @@ class Train:
 
 if __name__ == "__main__":
     t = Train(1000)
-    t.main()k
+    t.main()
