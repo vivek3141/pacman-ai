@@ -20,7 +20,7 @@ class Train:
         self.par = parallel
 
     @staticmethod
-    def _fitness_func(genome, config):
+    def _fitness_func(index, genome, config):
         env = gym.make(ENV)
 
         try:
@@ -43,6 +43,9 @@ class Train:
             fitness = total_reward
             genome.fitness = fitness
 
+            if index % 30 == 0:
+                print(f"Genome {index}. Fitness {total_reward}")
+
             if fitness >= 500:
                 pickle.dump(genome, open("finisher.pkl", "wb"))  # Save a good model just in case of a crash
 
@@ -57,7 +60,7 @@ class Train:
         idx, genomes = zip(*genomes)
 
         for i in range(0, len(genomes), self.par):
-            processes = [mp.Process(target=self._fitness_func, args=(genome, config)) for genome in
+            processes = [mp.Process(target=self._fitness_func, args=(i, genome, config)) for genome in
                          genomes[i:i + self.par]]  # Define all the processes
 
             # Run the processes
