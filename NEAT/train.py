@@ -5,16 +5,16 @@ import pickle
 import multiprocessing as mp
 import visualize
 
-gym.logger.set_level(40)
-os.chdir("./checkpoints")
+gym.logger.set_level(40) # Disable gym warnings
+os.chdir("./checkpoints") # To store the checkpoints in this folder
 
+# Learning Parameters
+NUM_GENERATIONS=1000
+PARALLEL = 2 # Number of environments to run at once
+ENV = "MsPacman-ram-v0"
 
 class Train:
     def __init__(self, generations, parallel=2, level="1-1"):
-        self.actions = [
-            [0, 0, 0, 1, 0, 1],
-            [0, 0, 0, 1, 1, 1],
-        ]
         self.generations = generations
         self.lock = mp.Lock()
         self.par = parallel
