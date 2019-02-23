@@ -12,6 +12,7 @@ os.chdir("./checkpoints")  # To store the checkpoints in this folder
 NUM_GENERATIONS = 1000
 PARALLEL = 2  # Number of environments to run at once
 ENV = "MsPacman-ram-v0"  # RAM means number of inputs 128
+CONFIG_FILE = "config"
 
 
 class Train:
@@ -20,7 +21,7 @@ class Train:
         self.par = parallel
 
     @staticmethod
-    def _fitness_func(index, genome, config):
+    def _fitness_func(genome, config, o):
         env = gym.make(ENV)
 
         try:
@@ -41,10 +42,10 @@ class Train:
                 # env.render()  # Uncomment this if you want the game to show when training
 
             fitness = total_reward
-            genome.fitness = fitness
+            o.put(fitness)
 
-            if index % 30 == 0:
-                print(f"Genome {index}. Fitness {total_reward}")
+            # if index % 30 == 0:
+            #    print(f"Genome {index}. Fitness {total_reward}")
 
             if fitness >= 500:
                 pickle.dump(genome, open("finisher.pkl", "wb"))  # Save a good model just in case of a crash
@@ -60,12 +61,17 @@ class Train:
         idx, genomes = zip(*genomes)
 
         for i in range(0, len(genomes), self.par):
-            processes = [mp.Process(target=self._fitness_func, args=(i, genome, config)) for genome in
+            output = mp.Queue()
+            processes = [mp.Process(target=self._fitness_func, args=(genome, config, output)) for genome in
                          genomes[i:i + self.par]]  # Define all the processes
 
             # Run the processes
             [p.start() for p in processes]
             [p.join() for p in processes]
+
+            results = [output.get() for _ in processes]
+            for n, r in enumerate(results):
+                genomes[i + n].fitness = r
 
     def _run(self, config_file, generations):
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -84,7 +90,7 @@ class Train:
         visualize.plot_stats(stats, ylog=False, view=True)
         visualize.plot_species(stats, view=True)
 
-    def main(self, config_file='config'):
+    def main(self, config_file=CONFIG_FILE):
         local_dir = os.path.dirname(__file__)
         config_path = os.path.join(local_dir, config_file)
         self._run(config_path, self.generations)
