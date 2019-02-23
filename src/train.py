@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 import argparse
 
-ENV = "MsPacman-ram-v0"  # MsPacman-ram gives the ram as input - 128 inputs
+ENV = "MsPacman-ram-v0"  # MsPacman-ram gives the console's memory as input - 128 inputs
 
 # Learning Arguments
 NUM_EPISODES = 2000
