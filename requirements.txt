@@ -1,0 +1,5 @@
+numpy
+gym
+keras
+keras-rl
+neat-python
