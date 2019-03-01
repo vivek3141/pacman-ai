@@ -74,13 +74,17 @@ make neat-test
 #### Q-Learning
 Q-learning learns the action-value function Q(s, a): how good to take an action at a particular state.
 Here's what each term means:
+
 * state - The observation you take from the environment. In this case, it would be an image
 of the Pacman game or the RAM of the Atari console.<br>
+
 ![Pacman State](https://i.imgur.com/2yT83gV.jpg)
 * action - The program's output for this particular state. For example, an action 
 would be to move left, up, right, or down in Pacman
+
 * reward - A reward is a number that tells how good or bad an episode was. In this
 case, the reward can be the score.
+
 * Q(s, a) - Q is called the action-value function. In Q Learning, we build an table,
 called the Q-Table for every state action pair. This Q Table helps determine 
 what action to choose. 
