@@ -77,8 +77,8 @@ Here's what each term means:
 
 * state - The observation you take from the environment. In this case, it would be an image
 of the Pacman game or the RAM of the Atari console.<br>
-
 ![Pacman State](https://i.imgur.com/2yT83gV.jpg)
+
 * action - The program's output for this particular state. For example, an action 
 would be to move left, up, right, or down in Pacman
 
@@ -88,3 +88,15 @@ case, the reward can be the score.
 * Q(s, a) - Q is called the action-value function. In Q Learning, we build an table,
 called the Q-Table for every state action pair. This Q Table helps determine 
 what action to choose. 
+
+This kind of state-action-reward system where the next state depends on the
+previous state is called Markov Decision Process.<br>
+
+![MDP](https://qph.fs.quoracdn.net/main-qimg-f92c275af47e561651857f9af6bb85e9)
+
+##### How Q-Learning Works
+
+![Q-Learning](https://cdn-images-1.medium.com/max/1600/1*QeoQEqWYYPs1P8yUwyaJVQ.png)
+
+#### Deep-Q-Learning
+
