@@ -9,7 +9,7 @@ pip install -r requirements.txt
 ```
 OR
 ```bash
-sudo make
+sudo make install
 ```
 
 ## NEAT
