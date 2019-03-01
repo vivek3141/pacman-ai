@@ -12,3 +12,6 @@ neat-train:
 
 neat-test:
 	@python3 NEAT/test.py
+
+q-learning:
+	@python3 q_learning/q_learning_tester.py
