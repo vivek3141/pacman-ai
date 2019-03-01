@@ -2,7 +2,7 @@
 This project builds a program that can play the original 1980 Atari Pacman. 
 The approaches used are Deep-Q-Learning and Neuroevolution of Augmenting Topologies
 
-### Running The Program
+## Running The Program
 Use the Makefile to run various parts of this project.
 * NEAT
     * Train - `make neat-train`
@@ -18,7 +18,7 @@ Use the Makefile to run various parts of this project.
 python3 main.py [algorithm] [train/test]
 ```
 
-### Requirements
+## Requirements
 Install the requirements with
 ```bash
 pip install -r requirements.txt
@@ -41,7 +41,7 @@ Test the NEAT model:
 make neat-test
 ```
 
-#### Explanation
+### Explanation
 For an explanation on a project using the same algorithm watch [this video](https://www.youtube.com/watch?v=UdJ4titVY7I).
 #### Short Explanation
 This program uses a mathematical model, called a neural network, which simulates the brain of a human being. 
@@ -68,3 +68,5 @@ Test the NEAT model:
 ```bash
 make neat-test
 ```
+
+### Explanation
