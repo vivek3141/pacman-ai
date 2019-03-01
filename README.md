@@ -57,3 +57,14 @@ make a much more effective neuroevolution model. Neuroevolution is known to do b
 reinforcement learning models.<br>
 
 ## DQN
+All files using NEAT are stored under `DQN/`
+
+Train the NEAT model:
+```bash
+make neat-train
+```
+
+Test the NEAT model:
+```bash
+make neat-test
+```
