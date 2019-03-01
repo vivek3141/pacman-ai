@@ -106,5 +106,4 @@ The input to the neural network is the state of the environment
 and the outputs are the Q-Values.
 The action with the maximum predicted Q-value is chosen as our action 
 to be taken in the environment.
-
 ![DQN](https://cdn-images-1.medium.com/max/1200/1*0_TNa54fr_LsLOllgIsrcw.png)
