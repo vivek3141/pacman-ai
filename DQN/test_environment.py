@@ -1,7 +1,7 @@
 import gym
 import time
 
-env = gym.make("CartPole-v0")
+env = gym.make("Taxi-v2")
 env.reset()
 print(env.action_space)
 
