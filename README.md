@@ -59,14 +59,14 @@ reinforcement learning models.<br>
 ## DQN - Deep Q-Learning
 All files using DQN are stored under `DQN/`
 
-Train the NEAT model:
+Train the DQN model:
 ```bash
-make neat-train
+make rl-train
 ```
 
-Test the NEAT model:
+Test the DQN model:
 ```bash
-make neat-test
+make rl-test
 ```
 
 ### Explanation
