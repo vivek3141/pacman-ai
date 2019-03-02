@@ -28,7 +28,7 @@ pip install -r requirements.txt
 sudo make install
 ```
 
-## NEAT
+## NEAT - Neuroevolution of Augmenting Topologies
 All files using NEAT are stored under `NEAT/`
 
 Train the NEAT model:
@@ -56,8 +56,8 @@ are bred and some mutations are introduced. `NEAT` introduces features like spec
 make a much more effective neuroevolution model. Neuroevolution is known to do better than standard
 reinforcement learning models.<br>
 
-## DQN
-All files using NEAT are stored under `DQN/`
+## DQN - Deep Q-Learning
+All files using DQN are stored under `DQN/`
 
 Train the NEAT model:
 ```bash
